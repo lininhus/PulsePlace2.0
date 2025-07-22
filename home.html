@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>PulsePlace</title>
+    <style>
+        .card-img-top {
+            width: 400px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        body {
+            background-image: url(""); /* Update with actual image path */
+            background-size: cover;
+            background-position: no-repeat;
+            background-color: white;
+        }
+        .headline {
+            text-align: left;
+            margin-top: 100px;
+            margin-left: 0;
+            font-size: 2.5em;
+        }
+        .card-columns {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: flex-start;
+            margin-left: 0;
+        }
+        .card {
+            flex: 0 0 300px;
+            text-align: left;
+        }
+        .card-title, .card-text {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">PulsePlace</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <input class="form-control mr-2" type="search" placeholder="Search..." aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </div>
+        <button class="btn btn-primary my-2 my-sm-0 ml-auto">Account</button>
+    </nav>
+
+    <!-- Headline -->
+    <div class="headline">
+        <h1>Events</h1>
+    </div>
+
+    <!-- Slide Cards Section -->
+    <div class="container">
+        <div class="card-columns">
+            <a href="soccer.html" style="text-decoration:none; color:inherit;">
+                <div class="card">
+                    <img src="imagemdaaquadradefault.jpg" class="card-img-top" alt="Event 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Soccer at Greenfield Arena</h5>
+                        <p class="card-text">Wednesday evening starting at 17:00.Click to expand and see all the details</p>
+                    </div>
+                </div>
+            </a>
+            <a href="basketball.html" style="text-decoration:none; color:inherit;">
+                <div class="card">
+                    <img src="imagemdaaquadradefault.jpg" class="card-img-top" alt="Event 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Basketball at Cedar Grove Center</h5>
+                        <p class="card-text">This event is set to happen at friday in the morning.Click to expand and see all the details.</p>
+                    </div>
+                </div>
+            </a>
+            <!-- Add more cards as needed -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

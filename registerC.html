@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Company</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .register-box {
+      max-width: 700px;
+      margin: auto;
+      margin-top: 5vh;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    }
+    .postcode-toggle {
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #007bff;
+      padding: 0;
+    }
+    .postcode-details-box {
+      transition: all 0.3s ease;
+    }
+    .sport-availability {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="register-box">
+      <h3 class="text-center mb-4">Register Company / Sports Center</h3>
+      <form id="registerCompanyForm">
+        <!-- Company Name -->
+        <div class="mb-3">
+          <label for="companyName" class="form-label">Company/Sports Center Name</label>
+          <input type="text" class="form-control" id="companyName" required>
+        </div>
+        <!-- Location (Zipcode) -->
+        <div class="mb-3">
+          <label for="zipcode" class="form-label">Postcode (London only)</label>
+          <input type="text" class="form-control" id="zipcode" placeholder="e.g. SW1A 1AA" required oninput="lookupPostcode()">
+          <div id="zipFeedback" class="form-text text-danger d-none">Invalid or non-London postcode.</div>
+          <div class="mt-2">
+            <button type="button" class="postcode-toggle d-none" id="toggleArrow" onclick="togglePostcodeInfo()">
+              ➤ Show address details
+            </button>
+          </div>
+          <div id="postcodeInfo" class="postcode-details-box border rounded bg-light p-3 mt-2 d-none">
+            <strong>Address Details:</strong>
+            <p id="postcodeDetails" class="mb-0 text-muted"></p>
+          </div>
+        </div>
+        <!-- Sports Offered -->
+        <div class="mb-3">
+          <label class="form-label">Available Sports:</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="soccer" value="soccer" onclick="toggleSportAvailability(this)">
+            <label class="form-check-label" for="soccer">Soccer</label>
+            <div id="soccerAvailability" class="sport-availability">
+              <label class="form-label">Soccer Availability:</label>
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Sunday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerSundayMorning" value="morning">
+                    <label class="form-check-label" for="soccerSundayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerSundayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerSundayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerSundayEvening" value="evening">
+                    <label class="form-check-label" for="soccerSundayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Monday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerMondayMorning" value="morning">
+                    <label class="form-check-label" for="soccerMondayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerMondayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerMondayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerMondayEvening" value="evening">
+                    <label class="form-check-label" for="soccerMondayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Tuesday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerTuesdayMorning" value="morning">
+                    <label class="form-check-label" for="soccerTuesdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerTuesdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerTuesdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerTuesdayEvening" value="evening">
+                    <label class="form-check-label" for="soccerTuesdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Wednesday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerWednesdayMorning" value="morning">
+                    <label class="form-check-label" for="soccerWednesdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerWednesdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerWednesdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerWednesdayEvening" value="evening">
+                    <label class="form-check-label" for="soccerWednesdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Thursday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerThursdayMorning" value="morning">
+                    <label class="form-check-label" for="soccerThursdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerThursdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerThursdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerThursdayEvening" value="evening">
+                    <label class="form-check-label" for="soccerThursdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Friday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerFridayMorning" value="morning">
+                    <label class="form-check-label" for="soccerFridayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerFridayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerFridayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerFridayEvening" value="evening">
+                    <label class="form-check-label" for="soccerFridayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Saturday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerSaturdayMorning" value="morning">
+                    <label class="form-check-label" for="soccerSaturdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerSaturdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="soccerSaturdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="soccerSaturdayEvening" value="evening">
+                    <label class="form-check-label" for="soccerSaturdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="basketball" value="basketball" onclick="toggleSportAvailability(this)">
+            <label class="form-check-label" for="basketball">Basketball</label>
+            <div id="basketballAvailability" class="sport-availability">
+              <label class="form-label">Basketball Availability:</label>
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Sunday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballSundayMorning" value="morning">
+                    <label class="form-check-label" for="basketballSundayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballSundayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballSundayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballSundayEvening" value="evening">
+                    <label class="form-check-label" for="basketballSundayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Monday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballMondayMorning" value="morning">
+                    <label class="form-check-label" for="basketballMondayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballMondayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballMondayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballMondayEvening" value="evening">
+                    <label class="form-check-label" for="basketballMondayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Tuesday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballTuesdayMorning" value="morning">
+                    <label class="form-check-label" for="basketballTuesdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballTuesdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballTuesdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballTuesdayEvening" value="evening">
+                    <label class="form-check-label" for="basketballTuesdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Wednesday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballWednesdayMorning" value="morning">
+                    <label class="form-check-label" for="basketballWednesdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballWednesdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballWednesdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballWednesdayEvening" value="evening">
+                    <label class="form-check-label" for="basketballWednesdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Thursday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballThursdayMorning" value="morning">
+                    <label class="form-check-label" for="basketballThursdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballThursdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballThursdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballThursdayEvening" value="evening">
+                    <label class="form-check-label" for="basketballThursdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Friday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballFridayMorning" value="morning">
+                    <label class="form-check-label" for="basketballFridayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballFridayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballFridayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballFridayEvening" value="evening">
+                    <label class="form-check-label" for="basketballFridayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Saturday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballSaturdayMorning" value="morning">
+                    <label class="form-check-label" for="basketballSaturdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballSaturdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="basketballSaturdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="basketballSaturdayEvening" value="evening">
+                    <label class="form-check-label" for="basketballSaturdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="volleyball" value="volleyball" onclick="toggleSportAvailability(this)">
+            <label class="form-check-label" for="volleyball">Volleyball</label>
+            <div id="volleyballAvailability" class="sport-availability">
+              <label class="form-label">Volleyball Availability:</label>
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Sunday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballSundayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballSundayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballSundayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballSundayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballSundayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballSundayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Monday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballMondayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballMondayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballMondayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballMondayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballMondayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballMondayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Tuesday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballTuesdayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballTuesdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballTuesdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballTuesdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballTuesdayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballTuesdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Wednesday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballWednesdayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballWednesdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballWednesdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballWednesdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballWednesdayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballWednesdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Thursday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballThursdayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballThursdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballThursdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballThursdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballThursdayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballThursdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Friday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballFridayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballFridayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballFridayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballFridayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballFridayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballFridayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-2" style="min-width:200px;">
+                  <strong>Saturday</strong><br>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballSaturdayMorning" value="morning">
+                    <label class="form-check-label" for="volleyballSaturdayMorning">Morning (6:00 - 12:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballSaturdayAfternoon" value="afternoon">
+                    <label class="form-check-label" for="volleyballSaturdayAfternoon">Afternoon (12:01 - 17:00)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="volleyballSaturdayEvening" value="evening">
+                    <label class="form-check-label" for="volleyballSaturdayEvening">Evening (17:01 - 20:00)</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="home.html" class="btn btn-success w-100">Register Company</a>
+      </form>
+    </div>
+  </div>
+  <script>
+    const londonBoroughs = [
+      "City of London", "Barking and Dagenham", "Barnet", "Bexley", "Brent", 
+      "Bromley", "Camden", "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", 
+      "Hammersmith and Fulham", "Haringey", "Harrow", "Havering", "Hillingdon", 
+      "Hounslow", "Islington", "Kensington and Chelsea", "Kingston upon Thames", 
+      "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond upon Thames", 
+      "Southwark", "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"
+    ];
+    let postcodeExpanded = false;
+    function lookupPostcode() {
+      const zip = document.getElementById('zipcode').value.trim();
+      const zipFeedback = document.getElementById('zipFeedback');
+      const toggleBtn = document.getElementById('toggleArrow');
+      const infoBox = document.getElementById('postcodeInfo');
+      const infoText = document.getElementById('postcodeDetails');
+      zipFeedback.classList.add('d-none');
+      infoBox.classList.add('d-none');
+      toggleBtn.classList.add('d-none');
+      toggleBtn.textContent = "➤ Show address details";
+      postcodeExpanded = false;
+      if (zip.length < 5) return;
+      fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(zip)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 200 && data.result) {
+            const result = data.result;
+            const district = result.admin_district || "";
+            const constituency = result.parliamentary_constituency || "";
+            const isLondon = londonBoroughs.some(b =>
+              b.toLowerCase() === district.toLowerCase() ||
+              b.toLowerCase() === constituency.toLowerCase()
+            );
+            if (isLondon) {
+              infoText.innerHTML = `
+                Postcode: ${result.postcode}<br>
+                Country: ${result.country}<br>
+                Region: ${result.region}<br>
+                Borough: ${district}<br>
+                Constituency: ${constituency}
+              `;
+              toggleBtn.classList.remove('d-none');
+            } else {
+              zipFeedback.textContent = "Postcode is valid but not located in London.";
+              zipFeedback.classList.remove('d-none');
+            }
+          } else {
+            zipFeedback.textContent = "Invalid UK postcode.";
+            zipFeedback.classList.remove('d-none');
+          }
+        })
+        .catch(() => {
+          zipFeedback.textContent = "Error validating postcode.";
+          zipFeedback.classList.remove('d-none');
+        });
+    }
+    function togglePostcodeInfo() {
+      postcodeExpanded = !postcodeExpanded;
+      const box = document.getElementById('postcodeInfo');
+      const btn = document.getElementById('toggleArrow');
+      if (postcodeExpanded) {
+        box.classList.remove('d-none');
+        btn.textContent = "▼ Hide address details";
+      } else {
+        box.classList.add('d-none');
+        btn.textContent = "➤ Show address details";
+      }
+    }
+    function toggleSportAvailability(checkbox) {
+      const div = document.getElementById(checkbox.id + 'Availability');
+      if (checkbox.checked) {
+        div.style.display = 'block';
+      } else {
+        div.style.display = 'none';
+        // Optionally clear all checked boxes inside
+        const checks = div.querySelectorAll('input[type="checkbox"]');
+        checks.forEach(c => c.checked = false);
+      }
+    }
+  </script>
+</body>
+</html>

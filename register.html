@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .register-box {
+      max-width: 600px;
+      margin: auto;
+      margin-top: 5vh;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .postcode-toggle {
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #007bff;
+      padding: 0;
+    }
+
+    .postcode-details-box {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="register-box">
+      <h3 class="text-center mb-4">Register</h3>
+      <form id="registerForm" onsubmit="return validateForm(event)">
+        
+        <!-- Name Row -->
+        <div class="row mb-3">
+          <div class="col">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" required>
+          </div>
+          <div class="col">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" required>
+          </div>
+        </div>
+
+        <!-- Age/Height/weight/bmi -->
+        <div class="row mb-3 align-items-end">
+  <div class="col-md-3">
+    <label for="age" class="form-label">Age</label>
+    <input type="number" class="form-control" id="age" min="1" required>
+  </div>
+  <div class="col-md-3">
+    <label for="height" class="form-label">Height (cm)</label>
+    <input type="number" class="form-control" id="height" min="0" step="0.1" required oninput="updateBMI()">
+  </div>
+  <div class="col-md-3">
+    <label for="weight" class="form-label">Weight (kg)</label>
+    <input type="number" class="form-control" id="weight" min="0" step="0.1" required oninput="updateBMI()">
+  </div>
+  <div class="col-md-3">
+    <div id="bmiDisplay" style="opacity: 0.2; font-size: 14px; color: #333;">
+      <label class="form-label">BMI</label>
+      <div id="bmiResult">–</div>
+    </div>
+  </div>
+</div>
+        <!-- Gender -->
+        <div class="mb-3">
+          <label class="form-label d-block">Gender</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="genderMale" value="male" required>
+            <label class="form-check-label" for="genderMale">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="female">
+            <label class="form-check-label" for="genderFemale">Female</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="genderOther" value="other">
+            <label class="form-check-label" for="genderOther">Other</label>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" required>
+          <div id="emailFeedback" class="form-text text-danger d-none">Email is already in use.</div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" required>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" required>
+          <div id="passwordFeedback" class="form-text text-danger d-none">Passwords do not match.</div>
+        </div>
+
+        <!-- Postcode -->
+        <div class="mb-3">
+          <label for="zipcode" class="form-label">Postcode (London only)</label>
+          <!-- SW1A 1AA -->
+          <input type="text" class="form-control" id="zipcode" placeholder="e.g. SW1A 1AA" required oninput="lookupPostcode()">
+          <div id="zipFeedback" class="form-text text-danger d-none">Invalid or non-London postcode.</div>
+
+          <div class="mt-2">
+            <button type="button" class="postcode-toggle d-none" id="toggleArrow" onclick="togglePostcodeInfo()">
+              ➤ Show address details
+            </button>
+          </div>
+
+          <div id="postcodeInfo" class="postcode-details-box border rounded bg-light p-3 mt-2 d-none">
+            <strong>Address Details:</strong>
+            <p id="postcodeDetails" class="mb-0 text-muted"></p>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        
+        <a href="registerform.html" class="btn btn-success w-100 mb-2">Register</a>
+        <div class="text-start">
+          <a href="registerC.html" style="color:#6c757d; opacity:0.5; text-decoration:underline; font-weight:500;">Register as a company</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const existingEmails = ["test@example.com", "admin@london.com"];
+    const londonBoroughs = [
+      "City of London", "Barking and Dagenham", "Barnet", "Bexley", "Brent", 
+      "Bromley", "Camden", "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", 
+      "Hammersmith and Fulham", "Haringey", "Harrow", "Havering", "Hillingdon", 
+      "Hounslow", "Islington", "Kensington and Chelsea", "Kingston upon Thames", 
+      "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond upon Thames", 
+      "Southwark", "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"
+    ];
+
+    let postcodeExpanded = false;
+
+    function validateForm(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      let isValid = true;
+
+      // Email check
+      const emailUsed = existingEmails.includes(email);
+      document.getElementById('emailFeedback').classList.toggle('d-none', !emailUsed);
+      if (emailUsed) isValid = false;
+
+      // Password match
+      const mismatch = password !== confirmPassword;
+      document.getElementById('passwordFeedback').classList.toggle('d-none', !mismatch);
+      if (mismatch) isValid = false;
+
+      if (isValid) {
+        alert("Registration successful!");
+      }
+    }
+
+    function lookupPostcode() {
+      const zip = document.getElementById('zipcode').value.trim();
+      const zipFeedback = document.getElementById('zipFeedback');
+      const toggleBtn = document.getElementById('toggleArrow');
+      const infoBox = document.getElementById('postcodeInfo');
+      const infoText = document.getElementById('postcodeDetails');
+
+      // Reset
+      zipFeedback.classList.add('d-none');
+      infoBox.classList.add('d-none');
+      toggleBtn.classList.add('d-none');
+      toggleBtn.textContent = "➤ Show address details";
+      postcodeExpanded = false;
+
+      if (zip.length < 5) return;
+
+      fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(zip)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 200 && data.result) {
+            const result = data.result;
+            const district = result.admin_district || "";
+            const constituency = result.parliamentary_constituency || "";
+
+            const isLondon = londonBoroughs.some(b =>
+              b.toLowerCase() === district.toLowerCase() ||
+              b.toLowerCase() === constituency.toLowerCase()
+            );
+
+            if (isLondon) {
+              infoText.innerHTML = `
+                Postcode: ${result.postcode}<br>
+                Country: ${result.country}<br>
+                Region: ${result.region}<br>
+                Borough: ${district}<br>
+                Constituency: ${constituency}
+              `;
+              toggleBtn.classList.remove('d-none');
+            } else {
+              zipFeedback.textContent = "Postcode is valid but not located in London.";
+              zipFeedback.classList.remove('d-none');
+            }
+          } else {
+            zipFeedback.textContent = "Invalid UK postcode.";
+            zipFeedback.classList.remove('d-none');
+          }
+        })
+        .catch(() => {
+          zipFeedback.textContent = "Error validating postcode.";
+          zipFeedback.classList.remove('d-none');
+        });
+    }
+
+    function togglePostcodeInfo() {
+      postcodeExpanded = !postcodeExpanded;
+      const box = document.getElementById('postcodeInfo');
+      const btn = document.getElementById('toggleArrow');
+
+      if (postcodeExpanded) {
+        box.classList.remove('d-none');
+        btn.textContent = "▼ Hide address details";
+      } else {
+        box.classList.add('d-none');
+        btn.textContent = "➤ Show address details";
+      }
+    }
+    function updateBMI() {
+  const height = parseFloat(document.getElementById('height').value);
+  const weight = parseFloat(document.getElementById('weight').value);
+  const bmiResult = document.getElementById('bmiResult');
+
+  if (!isNaN(height) && !isNaN(weight) && height > 0) {
+    const bmi = weight / Math.pow(height / 100, 2);
+    bmiResult.innerText = bmi.toFixed(1);
+  } else {
+    bmiResult.innerText = '–';
+  }
+}
+  </script>
+</body>
+</html>
