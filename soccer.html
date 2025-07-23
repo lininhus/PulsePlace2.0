@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soccer Event - Greenfield Arena</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .event-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.08);
+      padding: 32px 24px 24px 24px;
+    }
+    .event-headline {
+      font-size: 2em;
+      font-weight: bold;
+      color: #1a7f3c;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+    .event-image {
+      width: 100%;
+      max-width: 400px;
+      height: 200px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      margin: 0 auto 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .event-description {
+      font-size: 1.1em;
+      margin-bottom: 24px;
+      color: #333;
+    }
+    .counter-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .counter-label {
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #222;
+    }
+    .counter-value {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #1a7f3c;
+      min-width: 32px;
+      text-align: center;
+    }
+    .signup-btn {
+      background: #1a7f3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .signup-btn:disabled {
+      background: #ccc;
+      color: #888;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="event-container">
+    <div class="event-headline">Greenfield Arena - Soccer</div>
+    <img src="imagemdaaquadradefault.jpg" alt="Greenfield Arena" class="event-image">
+    <div class="event-description">
+      Join us for a friendly soccer match at Greenfield Arena! All skill levels welcome. The event takes place Wednesday evening starting at 17:00. Sign up below to reserve your spot!
+    </div>
+    <div class="counter-row">
+      <span class="counter-label">Players signed up:</span>
+      <span id="headCounter" class="counter-value">0</span>
+      <button id="signupBtn" class="signup-btn" onclick="signup()">+</button>
+      <span style="font-size:0.95em; color:#888;">Max: 25</span>
+    </div>
+  </div>
+  <script>
+    let count = 0;
+    const maxCount = 25;
+    const counter = document.getElementById('headCounter');
+    const btn = document.getElementById('signupBtn');
+    function signup() {
+      if (count < maxCount) {
+        count++;
+        counter.textContent = count;
+        btn.disabled = true;
+      }
+    }
+  </script>
+</body>
+</html>
