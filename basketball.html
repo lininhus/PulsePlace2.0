@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basketball Event - Riverside Court</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .event-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+      padding: 32px 24px 24px 24px;
+    }
+
+    .event-headline {
+      font-size: 2em;
+      font-weight: bold;
+      color: #1a7f3c;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .event-image {
+      width: 100%;
+      max-width: 400px;
+      height: 200px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      margin: 0 auto 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    }
+
+    .event-description {
+      font-size: 1.1em;
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    .counter-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .counter-label {
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #222;
+    }
+
+    .counter-value {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #1a7f3c;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .signup-btn {
+      background: #1a7f3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .signup-btn:disabled {
+      background: #ccc;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .modal-blur {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      padding: 32px 24px 24px 24px;
+      max-width: 340px;
+      text-align: center;
+    }
+    .modal-btn {
+      min-width: 100px;
+      padding: 8px 0;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      margin: 0 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .modal-btn-continue {
+      background: #1a7f3c;
+      color: #fff;
+    }
+    .modal-btn-cancel {
+      background: #ccc;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="event-container">
+    <div id="modalBlur" class="modal-blur" style="display:none;">
+      <div class="modal-box">
+        <div id="modalText" style="margin-bottom:24px; font-size:1.1em;"></div>
+        <div>
+          <button id="modalContinue" class="modal-btn modal-btn-continue">Continue</button>
+          <button id="modalCancel" class="modal-btn modal-btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="event-headline">Riverside Court - Basketball</div>
+    <img src="imagemdaaquadradefault.jpg" alt="Riverside Court" class="event-image">
+    <div class="event-description">
+      Join us for a casual basketball game at Riverside Court! All skill levels are welcome. If you want to shoot some hoops and meet new people, come join us!
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-weight:bold;">Day: Friday</div>
+      <div style="font-weight:bold;">Time: Evening (17:01--20:00)</div>
+      <div style="font-weight:bold;">Address: </div>
+    </div>
+    <div class="counter-row">
+      <span class="counter-label">Players signed up:</span>
+      <span id="headCounter" class="counter-value">14</span>
+      <button id="signupBtn" class="signup-btn" onclick="signup()">+</button>
+      <span style="font-size:0.95em; color:#888;">Max: 25</span>
+    </div>
+    <div style="text-align:center; margin-top:-12px;">
+      <a href="#" id="unregisterLink" style="color:red; text-decoration:underline; font-size:1em; display:none;">Unregister</a>
+    </div>
+  </div>
+  <script>
+    let count = 14;
+    const maxCount = 25;
+    const counter = document.getElementById('headCounter');
+    const btn = document.getElementById('signupBtn');
+    const unregisterLink = document.getElementById('unregisterLink');
+
+    // Modal logic
+    const modalBlur = document.getElementById('modalBlur');
+    const modalText = document.getElementById('modalText');
+    const modalContinue = document.getElementById('modalContinue');
+    const modalCancel = document.getElementById('modalCancel');
+    let modalAction = null;
+
+    btn.addEventListener('click', function() {
+      if (count < maxCount) {
+        showModal('You are about to sign up for this event, do you agree to continue?', 'signup');
+      }
+    });
+
+    unregisterLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (count > 0) {
+        showModal('You are already confirmed for this event, are you sure you want to unregister?', 'unregister');
+      }
+    });
+
+    function showModal(text, action) {
+      modalText.textContent = text;
+      modalBlur.style.display = 'flex';
+      modalAction = action;
+    }
+    function hideModal() {
+      modalBlur.style.display = 'none';
+      modalAction = null;
+    }
+
+    modalContinue.addEventListener('click', function() {
+      if (modalAction === 'signup') {
+        count++;
+        counter.textContent = count;
+        btn.disabled = true;
+        unregisterLink.style.display = 'inline';
+      } else if (modalAction === 'unregister') {
+        count--;
+        counter.textContent = count;
+        btn.disabled = false;
+        unregisterLink.style.display = 'none';
+      }
+      hideModal();
+    });
+    modalCancel.addEventListener('click', function() {
+      hideModal();
+    });
+  </script>
+</body>
+
+</html>
