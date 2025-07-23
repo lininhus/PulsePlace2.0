@@ -44,10 +44,58 @@
     .password-toggle:hover {
       text-decoration: underline;
     }
+    .modal-blur {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      padding: 32px 24px 24px 24px;
+      max-width: 340px;
+      text-align: center;
+    }
+    .modal-btn {
+      min-width: 100px;
+      padding: 8px 0;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      margin: 0 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .modal-btn-agree {
+      background: #1a7f3c;
+      color: #fff;
+    }
+    .modal-btn-cancel {
+      background: #ccc;
+      color: #333;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div id="modalBlur" class="modal-blur" style="display:none;">
+      <div class="modal-box">
+        <div style="margin-bottom:18px; font-size:1.1em;">You are about to register to PulsePlace, but before you must agree with the Terms and Conditions.</div>
+        <div style="margin-bottom:24px;">
+          <a href="#" id="termsLink" style="color:#007bff; text-decoration:underline; font-size:1em;">Terms and Conditions</a>
+        </div>
+        <div>
+          <button id="modalAgree" class="modal-btn modal-btn-agree">Agree</button>
+          <button id="modalCancel" class="modal-btn modal-btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
     <div class="login-box">
       <h3 class="text-center mb-4">Login</h3>
       <form>
@@ -63,7 +111,7 @@
         <a href="home.html" class="btn btn-success w-100">Login</a>
         <div class="text-center mt-3">
           <!-- Updated Register link to go to "register.html" -->
-          <a href="register.html" class="register-link">Register</a>
+          <a href="#" id="registerLink" class="register-link">Register</a>
         </div>
       </form>
     </div>
@@ -85,6 +133,31 @@
         toggleText.textContent = 'Show Password';
       }
     }
+
+    // Modal logic for Register
+    const modalBlur = document.getElementById('modalBlur');
+    const registerLink = document.getElementById('registerLink');
+    const modalAgree = document.getElementById('modalAgree');
+    const modalCancel = document.getElementById('modalCancel');
+    const termsLink = document.getElementById('termsLink');
+
+    registerLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      modalBlur.style.display = 'flex';
+    });
+
+    modalAgree.addEventListener('click', function() {
+      window.location.href = 'register.html';
+    });
+
+    modalCancel.addEventListener('click', function() {
+      modalBlur.style.display = 'none';
+    });
+
+    termsLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.open('terms.html', '_blank');
+    });
   </script>
 </body>
 </html>
